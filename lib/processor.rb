@@ -4,6 +4,7 @@ module Paperclip
   class FaceCrop < Paperclip::Thumbnail
 
     @@debug = false
+    @@face_only = false
   
     #cattr_accessor :classifiers
     cattr_accessor :debug
@@ -121,6 +122,18 @@ module Paperclip
           Paperclip.run("convert", parameters, :source => "#{File.expand_path(file.path)}", :dest => "#{File.expand_path(file.path)}")
         end
         
+
+        if @@face_only
+          parameters = []
+          parameters << "-stroke" << "green"
+          parameters << "-fill" << "none"
+          parameters << faces_regions.map {|r| "-crop '#{r.width}x#{r.height}+#{r.top_left.x}+#{r.top_left.y}'"}
+          parameters << ":source"
+          parameters << ":dest"
+          parameters = parameters.flatten.compact.join(" ").strip.squeeze(" ")
+                    
+          Paperclip.run("convert", parameters, :source => "#{File.expand_path(file.path)}", :dest => "#{File.expand_path(file.path)}")
+        end
         
       end
     end
