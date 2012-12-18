@@ -4,10 +4,11 @@ module Paperclip
   class FaceCrop < Paperclip::Thumbnail
 
     @@debug = false
-    @@face_only = false
+    @@faceonly = false
   
     #cattr_accessor :classifiers
     cattr_accessor :debug
+    cattr_accessor :faceonly
         
     def self.detectors=(detectors)
       @@detectors = detectors.map do |name, options|
@@ -123,7 +124,7 @@ module Paperclip
         end
         
 
-        if @@face_only
+        if @@faceonly
           parameters = []
           parameters << "-stroke" << "green"
           parameters << "-fill" << "none"
